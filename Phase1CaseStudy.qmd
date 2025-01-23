@@ -18,8 +18,10 @@ format: pdf
 # Data to Concept and Learning
 
 ### Q1 - How difficult is the data to gather?
-> The data can be quite challenging to gather due to the diversity of school systems and the need for accurate data without noise. It requires collaboration with  educators, administrators, and students. It becomes increasingly difficult with data bias and differences in responses as some school systems 
+> The data is difficult to gather due to the variety of school systems and the need for accurate data without noise. It requires collaboration with  educators, administrators, and students. It becomes increasingly difficult with data bias and differences in responses as some school systems are more enthusiastic and report more data than others.
 
 ### Q2 - Is the target difficult to measure or break into smaller parts?
+> Yes, the target can be difficult to measure as the success of the software can be influenced by varying educational standards across different school systems, the different levels of technology usage, and the how schools measure satisfaction. Breaking it into smaller parts would require identifying measurable components such as individual feature usage and cost savings.
 
 ### Q3 - What level of uncertainty (risk) are you willing to accept?
+> I am willing to risk a moderate level such as giving a second or third best option for software if that means the software recommendations are more accurate across the board.
