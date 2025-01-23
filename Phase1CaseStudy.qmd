@@ -1,0 +1,25 @@
+---
+title: "DS Lifestyle Case Study"
+format: pdf
+---
+
+# The Problems in the Case Study
+
+### Q1 - What problems are facing the organization?
+
+> This organization is facing many challenges in regard to scale. In order to accurately provide recommendations for a vast diversity of school systems, the organization requires large amounts of data in order to provide accurate predictions. Along with this challenge, they also need to ensure that they need to ensure that their result is not too broad and is still tailored to the individual systems.
+
+### Q2 - What is the target variable and what type (reg or class) of solution are they developing?
+> The target variable is to find a successful software that is cost effective and will improve scores.
+
+### Q3 - How would they know the solution was working (business metric)?
+> They would know the solution was working by tracking key performance indicators (KPIs) such as the improvement in student scores, the reduction in costs associated with the software, and the overall satisfaction of the school systems using the software. They could measure the adoption rate of the software and the feedback from educators and administrators.
+
+# Data to Concept and Learning
+
+### Q1 - How difficult is the data to gather?
+> The data can be quite challenging to gather due to the diversity of school systems and the need for accurate data without noise. It requires collaboration with  educators, administrators, and students. It becomes increasingly difficult with data bias and differences in responses as some school systems 
+
+### Q2 - Is the target difficult to measure or break into smaller parts?
+
+### Q3 - What level of uncertainty (risk) are you willing to accept?
