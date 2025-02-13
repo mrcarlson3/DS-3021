@@ -1,8 +1,10 @@
 Goal: Build two data prep pipelines using different datasets to get practice with data preparation and question building.
-
+  
 Step one: Review these two datasets and brainstorm problems that could be addressed with the dataset. Identify a question for each dataset. 
 
-[College Completion Data Dictionary + Data](https://www.kaggle.com/datasets/thedevastator/boost-student-success-with-college-completion-da/data)
+[College Completion Data Dictionary](https://www.kaggle.com/datasets/thedevastator/boost-student-success-with-college-completion-da/data)
+
+[College Completion Data](https://raw.githubusercontent.com/UVADS/DS-3021/refs/heads/main/data/cc_institution_details.csv)
 
   - Dataset is in the data file in the DS 3021 repo, but was added after class started so you may need to "git pull" to get it.
 
