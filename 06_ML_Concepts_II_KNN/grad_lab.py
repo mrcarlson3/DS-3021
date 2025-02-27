@@ -100,3 +100,27 @@ sns.displot(
     multiple="fill",
     aspect=1.25
 )
+
+def clean_and_split_data(df, target, test_size=0.4, val_size=0.5, random_state=1984):
+    employed = ['admin', 'blue-collar', 'entrepreneur', 'housemaid', 'management',
+                'self-employed', 'services', 'technician']
+    df.iloc[:, df.columns.get_loc('job')] = df.iloc[:, df.columns.get_loc('job')].apply(lambda x: "Employed" if x in employed else "Unemployed")
+    
+    # Convert appropriate columns to category
+    cat_cols = ['job', 'marital', 'education', 'default', 'housing', 'contact', 'poutcome', target]
+    df[cat_cols] = df[cat_cols].astype('category')
+    
+    # Normalize numeric columns
+    numeric_cols = df.select_dtypes(include='int64').columns
+    scaler = preprocessing.MinMaxScaler()
+    df[numeric_cols] = scaler.fit_transform(df[numeric_cols])
+    
+    # One-hot encode categorical columns
+    encoded = pd.get_dummies(df[cat_cols])
+    df = df.drop(cat_cols, axis=1).join(encoded)
+    
+    # Split data into train, test, and validation sets
+    train, test = train_test_split(df, test_size=test_size, stratify=df[f'{target}_1'], random_state=random_state)
+    test, val = train_test_split(test, test_size=val_size, stratify=test[f'{target}_1'], random_state=random_state)
+    
+    return train, test, val
