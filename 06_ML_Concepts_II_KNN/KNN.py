@@ -15,10 +15,6 @@ import random
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.metrics import classification_report
 from sklearn import metrics
-<<<<<<< HEAD
-#from plot_metric.functions import BinaryClassification #need to pip install plot metric
-=======
->>>>>>> upstream/main
 
 #%%
 # -------- Data prep --------
