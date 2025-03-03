@@ -51,7 +51,6 @@ from sklearn.metrics import classification_report
 from sklearn import metrics
 from numpy import log
 
-
 grad_data = pd.read_csv('https://query.data.world/s/qpi2ltkz23yp2fcaz4jmlrskjx5qnp', encoding="cp1252")
 # the encoding part here is important to properly read the data!
 
@@ -90,13 +89,15 @@ grad_data2 = grad_data2.drop(grad_data[['med_sat_value']], axis=1)
 grad_data2.dropna(axis = 0, how = 'any', inplace = True)
 
 #%%
+#Start of assignment
+#Q1: build a model to answer the question you created for this dataset
 #dataset for assignment
 df = grad_data2.drop(['chronname'], axis=1)
 df['aid_value'] = df['aid_value'].replace(0, np.nan)
 df['log_aid'] = np.log(df['aid_value'])
 df['aid'] = pd.cut(df['log_aid'], bins=[0, 5.5, 8.6, 10.7], labels=['low', 'medium', 'high'])
 
-#Q1: Can we classify aid value based on the other features of the dataset
+#Q1 Question: Can we classify aid value based on the other features of the dataset?
 #%%
 def clean_and_split_data(df, target, test_size=0.4, val_size=0.5, random_state=1984):
     numeric_cols = df.select_dtypes(include=['int64', 'float64']).columns
@@ -130,6 +131,8 @@ y_val = val[['aid_low', 'aid_medium', 'aid_high']].idxmax(axis=1)
 y_test = test[['aid_low', 'aid_medium', 'aid_high']].idxmax(axis=1)
 
 #%%
+
+#Q2. Build a kNN model to predict your target variable using 3 nearest neighbors. Make sure it is a classification problem, meaning if needed changed the target variable.
 # Train KNN classifier
 neigh = KNeighborsClassifier(n_neighbors=3)
 neigh.fit(X_train, y_train)
@@ -145,14 +148,36 @@ print(f"Training Accuracy: {train_accuracy}")
 print(f"Validation Accuracy: {val_accuracy}")
 print(f"Test Accuracy: {test_accuracy}")
 
+y_test_pred = neigh.predict(X_test)
+y_test_prob = neigh.predict_proba(X_test)
+
+
 #%%
-# Generate confusion matrix
+#Q3. Create a dataframe that includes the test target values, test predicted values, and test probabilities of the positive class.
 y_val_pred = neigh.predict(X_val)
+results = pd.DataFrame({
+    'Actual': y_test.tolist(),
+    'Predicted': y_test_pred.tolist(),
+    'Probabilities': y_test_prob.tolist()
+})
+
+print(results.head())
+
+#%%
+#Q4. If you adjusted the k hyperparameter what do you think would happen to the threshold function? Would the confusion look the same at the same threshold levels or not? Why or why not?
+# If we adjusted the k hyperparameter, the threshold function would change. A smaller k value would make the model more sensitive to noise in the data, potentially leading to more false positives and negatives as well as overfitting the data showing false accuracy .
+# A larger k value would smooth out the predictions, making the model less sensitive to noise but potentially missing some of the finer details in the data, leading to underfitting. 
+# As a result, the confusion matrix looks different at different k values, as the model's performance would vary with changes in k as it begins to underfit the data more and more. For my data, it looks like the best accuracy is at k=7 and begins to drop after this point. 
+
+#%%
+#Q5: Evaluate the results using the confusion matrix. Then "walk" through your question, summarize what concerns or positive elements do you have about the model as it relates to your question?
+# Generate confusion matrix
 cm = confusion_matrix(y_val, y_val_pred, labels=neigh.classes_)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=neigh.classes_)
 disp.plot()
 plt.show()
-
+# The concerns I have about the model is that the accuracy stays around 83% for the test data, while the training data is much higher. This could mean there is overfitting and that the model would not do well on new data. The positive element is it seems that it is able to classify the data well with very 
+#little false negatives or positives. It makes me wonder what features are the best to incorporate as the predictors of aid value.
 #%%
 # Generate classification report
 print(classification_report(y_val, y_val_pred))
@@ -170,4 +195,67 @@ test_results = pd.DataFrame({'k': list(range(1, 22, 2)),
 print(test_results)
 
 #%%
-#Q2: 
+#Q6: Create two functions: One that cleans the data & splits into training|test and one that allows you to train and test the model with different k and threshold values. 
+def clean_and_split(df, target, categories, test_size=0.4, val_size=0.5, random_state=1984):
+    numeric_cols = df.select_dtypes(include=['int64', 'float64']).columns
+    scaler = preprocessing.MinMaxScaler()
+    df[numeric_cols] = scaler.fit_transform(df[numeric_cols])
+    
+    cat_cols = categories
+    df[cat_cols] = df[cat_cols].astype('category')
+    df = pd.get_dummies(df, columns=cat_cols)
+    
+    # One-hot encode target
+    df = pd.get_dummies(df, columns=[target], prefix=target)
+
+    # Split data into train, test, and validation sets
+    train, test = train_test_split(df, test_size=test_size, stratify=df[f'{target}_low'], random_state=random_state)
+    test, val = train_test_split(test, test_size=val_size, stratify=test[f'{target}_low'], random_state=random_state)
+    
+    X1_train = train.drop([f'{target}_low', f'{target}_medium', f'{target}_high'], axis=1)
+    y1_train = train[[f'{target}_low', f'{target}_medium', f'{target}_high']].idxmax(axis=1)
+    
+    X1_test = test.drop([f'{target}_low', f'{target}_medium', f'{target}_high'], axis=1)
+    y1_test = test[[f'{target}_low', f'{target}_medium', f'{target}_high']].idxmax(axis=1)
+    
+    X1_val = val.drop([f'{target}_low', f'{target}_medium', f'{target}_high'], axis=1)
+    y1_val = val[[f'{target}_low', f'{target}_medium', f'{target}_high']].idxmax(axis=1)
+    
+    return X1_train, y1_train, X1_test, y1_test, X1_val, y1_val
+
+
+def choose(k, X_train, y_train, X_test, y_test, threshold):
+    random.seed(1)
+    class_knn = KNeighborsClassifier(n_neighbors=k)
+    class_knn.fit(X_train, y_train)
+    
+    # Predict probabilities
+    y_prob = class_knn.predict_proba(X_test)
+    
+    # Apply threshold
+    y_pred = (y_prob >= threshold).astype(int)
+    
+    # Convert predictions to labels
+    y_pred_labels = []
+    for prob in y_prob:
+        if max(prob) >= threshold:
+            y_pred_labels.append(class_knn.classes_[np.argmax(prob)])
+        else:
+            y_pred_labels.append('unknown')
+    
+    return metrics.accuracy_score(y_test, y_pred_labels)
+
+#%%
+#Q7: How well does the model perform? Did the interaction of the adjusted thresholds and k values help the model? Why or why not?
+X1_train, y1_train, X1_test, y1_test, X1_val, y1_val = clean_and_split(df, 'aid', ['level', 'control', 'hbcu'])
+test1 = choose(7, X1_train, y1_train, X1_test, y1_test, 0.9)
+
+print(test1)
+# The model performed on par with the previous model the adjustment of the k value only altered the model slightly by 0.01. The adjusted thresholds did not help the model as decreasing it made it the same while increasing the threshold dramatically decreased the accuracy.
+#%%
+#Q8: Choose another variable as the target in the dataset and create another kNN model using the two functions you created in step 7.
+df['retain'] = df['retain_value'].replace(0, np.nan)
+df['retain'] = pd.cut(df['retain'], bins=[0, 0.5, 0.75, 1], labels=['low', 'medium', 'high'])                                 
+X2_train, y2_train, X2_test, y2_test, X2_val, y2_val = clean_and_split(df, 'retain', ['level','control', 'hbcu', 'aid'])
+test2 = choose(7, X2_train, y2_train, X2_test, y2_test, 0.2)
+print(test2)
