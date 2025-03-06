@@ -216,6 +216,9 @@ manual_cross_entropy_loss = cross_entropy(final_model.target.to_numpy(), final_m
 
 print(f"Manual Cross-Entropy Loss: {manual_cross_entropy_loss}")
 
+#%%
+print(f"Cross-Entropy Loss: {cross_entropy_loss}")
+
 #%% [markdown]
 #Cross-entropy and log loss are essentially the same concept and are 
 #often used interchangeably in the context of classification evaluation. 
@@ -223,8 +226,6 @@ print(f"Manual Cross-Entropy Loss: {manual_cross_entropy_loss}")
 #probability distribution and the actual distribution of the target classes.
 
 # Evaluate the cross-entropy loss
-print(f"Cross-Entropy Loss: {cross_entropy_loss}")
-print(f"Manual Cross-Entropy Loss: {manual_cross_entropy_loss}")
 
 # Lower values of cross-entropy loss indicate better performance of the model.
 # The cross-entropy loss value should be compared with other models or baseline
@@ -232,6 +233,8 @@ print(f"Manual Cross-Entropy Loss: {manual_cross_entropy_loss}")
 # 0 indicates a good model, but the context and specific problem domain matter. 
 # Over 1 is consider bad as well. 
 
+https://wiki.cloudfactory.com/docs/mp-wiki/loss/cross-entropy-loss
+                          
 # %% [markdown]
 # ### Question
 # what else can cross-entropy loss be used for? Is there a application in Neural Networks?
