@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import graphviz
 from sklearn.model_selection import train_test_split,GridSearchCV,RepeatedStratifiedKFold
 from sklearn import metrics
-from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.metrics import ConfusionMatrixDisplay, get_scorer_names  # Correct import for accessing scorer names
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.tree import DecisionTreeClassifier, export_graphviz 
 
@@ -67,8 +67,8 @@ print(203/(1279+203)) #of excellent
 # %%
 #Before we start move forward, we have one more preprocessing step
 #We must encode text_rank to become a continuous variable as that is the only type sklearn decision trees can currently take
-#winequality[["text_rank"]] = OrdinalEncoder().fit_transform(winequality[["text_rank"]])
-#print(winequality["text_rank"].value_counts()) #nice
+winequality[["text_rank"]] = OrdinalEncoder().fit_transform(winequality[["text_rank"]])
+print(winequality["text_rank"].value_counts()) #nice
 
 # %% [markdown]
 # ## Splitting the Data
@@ -107,7 +107,7 @@ kf = RepeatedStratifiedKFold(n_splits=10,n_repeats =5, random_state=42)
 #AUC for the ROC curve - remember this is measures how well our model distinguishes between classes
 #Recall - this is sensitivity of our model, also known as the true positive rate (predicted pos when actually pos)
 #Balanced accuracy - this is the (sensitivity + specificity)/2, or we can just say it is the number of correctly predicted data points
-print(metrics.SCORERS.keys()) #find them
+print(get_scorer_names())  # Use the correct function to list available scorers
 
 # %%
 #Define score, these are the keys we located above. This is what the models will be scored by
