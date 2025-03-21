@@ -79,7 +79,7 @@ def preprocess_winequality(df):
     df["text_rank"] = df["text_rank"].replace({'ave': 0, 'excellent': 1})
     
     # Drop quality column
-    df = df.drop(columns='quality')
+    #df = df.drop(columns='quality')
     
     return df
 
@@ -153,13 +153,9 @@ kf = RepeatedStratifiedKFold(n_splits=10, n_repeats =5, random_state=42)
 #AUC for the ROC curve - remember this is measures how well our model distinguishes between classes
 #Recall - this is sensitivity of our model, also known as the true positive rate (predicted pos when actually pos)
 #Balanced accuracy - this is the (sensitivity + specificity)/2, or we can just say it is the number of correctly predicted data points
-<<<<<<< HEAD
-print(get_scorer_names())  # Use the correct function to list available scorers
-=======
 
 metrics # let's peek at the metrics we can use
 
->>>>>>> upstream/main
 
 # %%
 #Define score, these are the keys we located above. This is what the models will be scored by
@@ -185,10 +181,10 @@ param={"max_depth" : [1,2,3,4,5,6,7,8,9,10,11],
 #Step 3: Train the Model
 
 #Classifier model we will use
-cl= DecisionTreeClassifier(random_state=1000)
+cl= DecisionTreeClassifier(criterion='gini', random_state=1000)
 
 #Set up search for best decisiontreeclassifier estimator across all of our folds based on roc_auc
-search = GridSearchCV(cl, param, scoring=scoring, n_jobs=1, cv=kf,refit='roc_auc')
+search = GridSearchCV(cl, param, scoring=scoring, n_jobs=1, cv=kf,refit='roc_auc', verbose=3)
 
 
 #%%
