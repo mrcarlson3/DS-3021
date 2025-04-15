@@ -2,6 +2,7 @@
 
 #%%
 # Load libraries
+import os
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -11,10 +12,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix
 #%%
-import os
-os.listdir()
+#import os
+#os.listdir()
 #print(os.getcwd())
-os.chdir('c:\\Users\\Brian Wright\\Documents\\3001Python\\DS-3001')
+os.chdir("/workspaces/DS-3021/")
 #%%
 # Load Data
 house_votes_Dem = pd.read_csv("data/house_votes_Dem.csv", encoding='latin')
@@ -56,9 +57,11 @@ for i in range(1, 11):
 
 #%%    
 # Plotting the graph
-elbow_data_Dem = pd.DataFrame({"k": range(1, 11), "wcss": wcss})
-fig = px.line(elbow_data_Dem, x="k", y="wcss", title="Elbow Method")
-fig.show()
+#elbow_data_Dem = pd.DataFrame({"k": range(1, 11), "wcss": wcss})
+fig = px.line(elbow_data_Dem, x="k", y="wcss", title="Elbow Method for Optimal k")
+fig.update_layout(xaxis_title="Number of Clusters (k)", yaxis_title="Within-Cluster Sum of Squares (WCSS)")
+fig.show(renderer="browser")
+#fig.show()
 #%%
 #Retrain the model with 3 clusters
 kmeans_obj_Dem = KMeans(n_clusters=3, random_state=1).fit(clust_data_Dem)
